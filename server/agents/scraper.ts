@@ -1,7 +1,12 @@
 /**
- * Web Scraper Agent - Simulates firmographic data collection
+ * Web Scraper Agent - Firmographic data collection
+ * Uses Gemini AI when GEMINI_API_KEY is set; otherwise uses mock data.
  */
 import type { PrismaClient } from '@prisma/client';
+import {
+  enrichLeadWithGemini,
+  mapGeminiToPrisma,
+} from '../services/geminiService';
 
 const MOCK_FIRMOGRAPHICS: Record<string, { revenue: string; employees: number; funding: string; techStack: string[] }> = {
   'acme.io': { revenue: '$10M-$50M', employees: 150, funding: 'Series B', techStack: ['React', 'Node.js', 'AWS'] },
@@ -26,6 +31,24 @@ export async function runScraper(prisma: PrismaClient, leadId: string) {
   if (!lead) throw new Error('Lead not found');
 
   const domain = lead.domain.replace(/^https?:\/\//, '').split('/')[0];
+  const website = lead.domain.startsWith('http') ? lead.domain : `https://${lead.domain}`;
+
+  const geminiResult = await enrichLeadWithGemini(lead.name, website);
+  if (geminiResult) {
+    const { companyProfile, nlpFeatures } = mapGeminiToPrisma(geminiResult, lead.name, lead.domain);
+    await prisma.companyProfile.upsert({
+      where: { leadId },
+      create: { leadId, ...companyProfile },
+      update: companyProfile,
+    });
+    await prisma.nLPFeatures.upsert({
+      where: { leadId },
+      create: { leadId, ...nlpFeatures },
+      update: nlpFeatures,
+    });
+    return { success: true, leadId, source: 'gemini' };
+  }
+
   const mock = MOCK_FIRMOGRAPHICS[domain] ?? {
     revenue: '$5M-$10M',
     employees: 50 + Math.floor(Math.random() * 100),
