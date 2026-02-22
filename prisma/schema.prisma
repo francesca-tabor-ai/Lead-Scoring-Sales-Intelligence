@@ -1,0 +1,112 @@
+// LSSIS - Lead Scoring & Sales Intelligence System
+// Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  companyId String   @map("company_id")
+  name      String
+  domain    String
+  region    String
+  industry  String
+  status    String   @default("new") // new, contacted, qualified, converted
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  companyProfile CompanyProfile?
+  nlpFeatures    NLPFeatures?
+  leadScores     LeadScore[]
+  agentJobs      AgentJob[]
+
+  @@map("leads")
+}
+
+model CompanyProfile {
+  id          String   @id @default(cuid())
+  leadId      String   @unique @map("lead_id")
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  revenue     String?  // e.g. "$10M-$50M"
+  employees   Int?
+  funding     String?  // e.g. "Series B"
+  techStack   String?  @map("tech_stack") // JSON array as string
+  rawData     String?  @map("raw_data") // scraped content
+  enrichedAt  DateTime? @map("enriched_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("company_profiles")
+}
+
+model NLPFeatures {
+  id              String   @id @default(cuid())
+  leadId          String   @unique @map("lead_id")
+  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  sentiment       Float?   // -1 to 1
+  expansionSignal Boolean? @map("expansion_signal")
+  hiringSignal    Boolean? @map("hiring_signal")
+  fundingSignal   Boolean? @map("funding_signal")
+  rawSignals      String?  @map("raw_signals") // JSON
+  processedAt     DateTime? @map("processed_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("nlp_features")
+}
+
+model LeadScore {
+  id                   String   @id @default(cuid())
+  leadId               String   @map("lead_id")
+  lead                 Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  conversionProbability Float   @map("conversion_probability")
+  leadScore            Float   @map("lead_score") // 0-100
+  priorityRank         Int     @map("priority_rank")
+  factors              String? // JSON explaining factors
+  scoredAt             DateTime @default(now()) @map("scored_at")
+
+  @@map("lead_scores")
+}
+
+model BudgetAllocation {
+  id            String   @id @default(cuid())
+  budget        Float
+  selectedLeads String   @map("selected_leads") // JSON array of lead IDs
+  expectedRoi   Float    @map("expected_roi")
+  totalCost     Float    @map("total_cost")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("budget_allocations")
+}
+
+model AgentJob {
+  id          String    @id @default(cuid())
+  leadId      String?   @map("lead_id")
+  lead        Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  agentType   String    @map("agent_type") // scraper, nlp, scoring, pipeline
+  status      String    @default("pending") // pending, running, completed, failed
+  startedAt   DateTime? @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  error       String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("agent_jobs")
+}
+
+model ModelMetrics {
+  id        String   @id @default(cuid())
+  accuracy  Float
+  precision Float
+  recall    Float
+  f1        Float
+  auc       Float
+  trainedAt DateTime @default(now()) @map("trained_at")
+
+  @@map("model_metrics")
+}
