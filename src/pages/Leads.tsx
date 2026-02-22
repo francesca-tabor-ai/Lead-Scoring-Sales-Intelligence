@@ -28,7 +28,7 @@ export function Leads() {
             <option value="qualified">Qualified</option>
             <option value="converted">Converted</option>
           </select>
-          <Link to="/leads/import">
+          <Link to="/dashboard/leads/import">
             <button>Import CSV</button>
           </Link>
         </div>
@@ -50,7 +50,7 @@ export function Leads() {
             {(leads ?? []).map((l) => (
               <tr key={l.id} style={{ borderTop: '1px solid var(--border)' }}>
                 <td style={{ padding: '0.75rem 1rem' }}>
-                  <Link to={`/leads/${l.id}`} style={{ fontWeight: 500 }}>{l.name}</Link>
+                  <Link to={`/dashboard/leads/${l.id}`} style={{ fontWeight: 500 }}>{l.name}</Link>
                 </td>
                 <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{l.domain}</td>
                 <td style={{ padding: '0.75rem 1rem' }}>{l.region}</td>

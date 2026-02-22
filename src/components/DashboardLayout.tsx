@@ -3,11 +3,12 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PageLoader } from './PageLoader';
 
 const NAV = [
-  { path: '/', label: 'Dashboard' },
-  { path: '/leads', label: 'Leads' },
-  { path: '/pipeline', label: 'Scoring Pipeline' },
-  { path: '/budget', label: 'Budget Optimizer' },
-  { path: '/admin', label: 'Admin' },
+  { path: '/', label: 'Home' },
+  { path: '/dashboard', label: 'Dashboard' },
+  { path: '/dashboard/leads', label: 'Leads' },
+  { path: '/dashboard/pipeline', label: 'Scoring Pipeline' },
+  { path: '/dashboard/budget', label: 'Budget Optimizer' },
+  { path: '/dashboard/admin', label: 'Admin' },
 ];
 
 export function DashboardLayout() {
@@ -22,7 +23,7 @@ export function DashboardLayout() {
         </div>
         <nav className="sidebar-nav">
           {NAV.map((n) => {
-            const isActive = loc.pathname === n.path || (n.path !== '/' && loc.pathname.startsWith(n.path));
+            const isActive = loc.pathname === n.path || (n.path !== '/' && n.path !== '/dashboard' && loc.pathname.startsWith(n.path)) || (n.path === '/dashboard' && loc.pathname === '/dashboard');
             return (
               <Link
                 key={n.path}

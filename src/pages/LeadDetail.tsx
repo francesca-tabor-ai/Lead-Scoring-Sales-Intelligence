@@ -11,8 +11,8 @@ export function LeadDetail() {
   const onRunPipeline = async () => {
     if (!id) return;
     await runPipeline.mutateAsync(id);
-    utils.leads.get.invalidate({ id });
-    utils.scores.getExplainability.invalidate({ id });
+    utils.leads.get.invalidate(id);
+    utils.scores.getExplainability.invalidate(id);
   };
 
   if (isLoading || !lead) return <div>Loading...</div>;

@@ -14,7 +14,7 @@ export function Pipeline() {
     if (!selected) return;
     await fn();
     utils.leads.list.invalidate();
-    utils.leads.get.invalidate({ id: selected });
+    utils.leads.get.invalidate(selected);
     utils.scores.getRankedLeads.invalidate();
   };
 

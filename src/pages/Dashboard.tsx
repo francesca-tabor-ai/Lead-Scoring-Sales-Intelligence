@@ -29,7 +29,7 @@ export function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="date" stroke="var(--text-secondary)" fontSize={11} />
                 <YAxis stroke="var(--text-secondary)" fontSize={11} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
-                <Tooltip contentStyle={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border)' }} formatter={(v: number) => [`${(v * 100).toFixed(1)}%`, 'Avg conversion']} />
+                <Tooltip contentStyle={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border)' }} formatter={(v) => [typeof v === 'number' ? `${(v * 100).toFixed(1)}%` : v, 'Avg conversion']} />
                 <Line type="monotone" dataKey="avgConversion" stroke="var(--accent)" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
@@ -40,7 +40,7 @@ export function Dashboard() {
           <h3 style={{ margin: '0 0 1rem', fontSize: '1rem' }}>Top Ranked Leads</h3>
           <div style={{ maxHeight: 220, overflow: 'auto' }}>
             {(ranked ?? []).slice(0, 8).map((r, i) => (
-              <Link key={r.lead.id} to={`/leads/${r.lead.id}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border)', color: 'inherit', textDecoration: 'none' }}>
+              <Link key={r.lead.id} to={`/dashboard/leads/${r.lead.id}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border)', color: 'inherit', textDecoration: 'none' }}>
                 <span>#{i + 1} {r.lead.name}</span>
                 <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{r.leadScore}</span>
               </Link>

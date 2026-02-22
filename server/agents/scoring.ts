@@ -9,7 +9,7 @@ interface Factor {
   description: string;
 }
 
-function computeScore(lead: { companyProfile?: { revenue: string; employees: number | null; funding: string } | null; nlpFeatures?: { sentiment: number | null; expansionSignal: boolean | null; hiringSignal: boolean | null; fundingSignal: boolean | null } | null }): { probability: number; score: number; factors: Factor[] } {
+function computeScore(lead: { companyProfile?: { revenue?: string | null; employees?: number | null; funding?: string | null } | null; nlpFeatures?: { sentiment?: number | null; expansionSignal?: boolean | null; hiringSignal?: boolean | null; fundingSignal?: boolean | null } | null }): { probability: number; score: number; factors: Factor[] } {
   const factors: Factor[] = [];
   let raw = 0.3; // base
 

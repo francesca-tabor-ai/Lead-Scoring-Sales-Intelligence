@@ -22,7 +22,6 @@ export function Budget() {
   const [budget, setBudget] = useState(10000);
   const { data: projections } = trpc.dashboard.getROIProjections.useQuery();
   const optimize = trpc.budget.optimize.useMutation();
-  const utils = trpc.useUtils();
 
   const result = optimize.data ?? (projections && projections.length > 0 ? (projections.find((p) => p.totalCost <= budget && p.totalCost > 0) ?? projections[0]) : null);
 
@@ -105,7 +104,7 @@ export function Budget() {
               <YAxis yAxisId="right" orientation="right" stroke="var(--text-secondary)" fontSize={11} label={{ value: 'Value ($k)', angle: 90, position: 'insideRight', style: { fill: 'var(--text-secondary)' } }} />
               <Tooltip
                 contentStyle={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border)' }}
-                formatter={(value: number, name: string) => [name === 'Expected Value' ? `$${value}k` : `${value}%`, name]}
+                formatter={(value, name) => [typeof value === 'number' ? (name === 'Expected Value ($k)' ? `$${value}k` : `${value}%`) : value, name]}
                 labelFormatter={(label) => `Budget: ${label}`}
               />
               <Legend />

@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { PageLoader } from './PageLoader';
 
 const NAV = [
   { path: '/', label: 'Product' },
@@ -28,7 +30,9 @@ export function MarketingLayout() {
         </div>
       </header>
       <main className="marketing-main">
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
       <footer className="marketing-footer">
         <div className="marketing-footer__inner">
