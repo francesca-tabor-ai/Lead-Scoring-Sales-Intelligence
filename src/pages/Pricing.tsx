@@ -63,7 +63,11 @@ const TIERS = {
   },
 } as const;
 
-function FeatureValue({ f }: { f: (typeof TIERS.individual.features)[0] }) {
+type FeatureItem =
+  | { label: string; value: boolean }
+  | { label: string; value: string; suffix?: string };
+
+function FeatureValue({ f }: { f: FeatureItem }) {
   if (typeof f.value === 'boolean') {
     return f.value ? <span className="pricing-feature__check">✓</span> : <span className="pricing-feature__cross">—</span>;
   }
