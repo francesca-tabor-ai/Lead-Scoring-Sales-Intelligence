@@ -455,7 +455,7 @@ function AdminUsers() {
             <tr><th>Email</th><th>Role</th><th>Created</th><th>Actions</th></tr>
           </thead>
           <tbody>
-            {items?.map((r) => (
+            {items?.map((r: { id: string; email: string; role: string; createdAt: string }) => (
               <tr key={r.id}>
                 <td>{r.email}</td><td>{r.role}</td><td>{new Date(r.createdAt).toLocaleString()}</td>
                 <td>
