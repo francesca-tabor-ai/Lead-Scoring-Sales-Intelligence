@@ -16,7 +16,7 @@ export function ImportCSV() {
     try {
       const res = await importCSV.mutateAsync(csv);
       utils.leads.list.invalidate();
-      navigate('/dashboard/leads', { state: { imported: res.imported } });
+      navigate('/leads', { state: { imported: res.imported } });
     } catch (e) {
       setError(String(e));
     }
@@ -72,7 +72,7 @@ export function ImportCSV() {
         <button onClick={onSubmit} disabled={!csv.trim() || importCSV.isPending}>
           {importCSV.isPending ? 'Importing...' : 'Import'}
         </button>
-        <Link to="/dashboard/leads"><button>Cancel</button></Link>
+        <Link to="/leads"><button>Cancel</button></Link>
       </div>
     </div>
   );

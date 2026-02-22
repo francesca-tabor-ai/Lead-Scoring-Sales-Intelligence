@@ -1,18 +1,21 @@
 import { Suspense } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PageLoader } from './PageLoader';
+import { ChatWidget } from './ChatWidget';
+import { useAuth } from '../contexts/AuthContext';
 
 const NAV = [
   { path: '/', label: 'Home' },
-  { path: '/dashboard', label: 'Dashboard' },
-  { path: '/dashboard/leads', label: 'Leads' },
-  { path: '/dashboard/pipeline', label: 'Scoring Pipeline' },
-  { path: '/dashboard/budget', label: 'Budget Optimizer' },
-  { path: '/dashboard/admin', label: 'Admin' },
+  { path: '/leads', label: 'Leads' },
+  { path: '/pipeline', label: 'Scoring Pipeline' },
+  { path: '/budget', label: 'Budget Optimizer' },
+  { path: '/admin', label: 'Admin' },
+  { path: '/contact', label: 'Contact Us' },
 ];
 
 export function DashboardLayout() {
   const loc = useLocation();
+  const { user, logout } = useAuth();
 
   return (
     <div className="app layout-dashboard">
@@ -22,8 +25,8 @@ export function DashboardLayout() {
           <div className="sidebar-tagline">Lead Scoring & Sales Intelligence</div>
         </div>
         <nav className="sidebar-nav">
-          {NAV.map((n) => {
-            const isActive = loc.pathname === n.path || (n.path !== '/' && n.path !== '/dashboard' && loc.pathname.startsWith(n.path)) || (n.path === '/dashboard' && loc.pathname === '/dashboard');
+          {NAV.filter((n) => n.path !== '/admin' || user?.role === 'admin').map((n) => {
+            const isActive = loc.pathname === n.path || (n.path !== '/' && loc.pathname.startsWith(n.path));
             return (
               <Link
                 key={n.path}
@@ -35,6 +38,19 @@ export function DashboardLayout() {
             );
           })}
         </nav>
+        <div className="sidebar-footer">
+          {user ? (
+            <>
+              <span className="sidebar-user">{user.email}</span>
+              {user.role === 'admin' && <span className="sidebar-badge">Admin</span>}
+              <button type="button" onClick={logout} className="sidebar-logout">
+                Sign out
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="nav-link">Sign in</Link>
+          )}
+        </div>
       </aside>
       <main className="layout-main">
         <Suspense fallback={<PageLoader />}>
@@ -42,7 +58,14 @@ export function DashboardLayout() {
             <Outlet />
           </div>
         </Suspense>
+        <footer className="dashboard-footer">
+          <div className="dashboard-footer__links">
+            <Link to="/contact">Contact</Link>
+          </div>
+          <span className="dashboard-footer__brand">LSSIS — Lead Scoring & Sales Intelligence</span>
+        </footer>
       </main>
+      <ChatWidget />
     </div>
   );
 }

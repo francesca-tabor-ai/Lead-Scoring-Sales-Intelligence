@@ -40,7 +40,7 @@ export function Dashboard() {
           <h3 style={{ margin: '0 0 1rem', fontSize: '1rem' }}>Top Ranked Leads</h3>
           <div style={{ maxHeight: 220, overflow: 'auto' }}>
             {(ranked ?? []).slice(0, 8).map((r, i) => (
-              <Link key={r.lead.id} to={`/dashboard/leads/${r.lead.id}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border)', color: 'inherit', textDecoration: 'none' }}>
+              <Link key={r.lead.id} to={`/leads/${r.lead.id}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border)', color: 'inherit', textDecoration: 'none' }}>
                 <span>#{i + 1} {r.lead.name}</span>
                 <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{r.leadScore}</span>
               </Link>
