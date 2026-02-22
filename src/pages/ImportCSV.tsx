@@ -38,7 +38,7 @@ export function ImportCSV() {
   return (
     <div>
       <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-        <Link to="/dashboard/leads" style={{ color: 'var(--text-secondary)' }}>← Leads</Link>
+        <Link to="/leads" style={{ color: 'var(--text-secondary)' }}>← Leads</Link>
       </div>
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Import CSV</h1>
       <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '0.9rem' }}>

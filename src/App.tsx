@@ -8,9 +8,18 @@ import { Budget } from './pages/Budget';
 import { Admin } from './pages/Admin';
 import { ImportCSV } from './pages/ImportCSV';
 import { Contact } from './pages/Contact';
+import { ApiDocs } from './pages/ApiDocs';
+import { Marketplace } from './pages/Marketplace';
+import { BuildApp } from './pages/BuildApp';
 import { Login } from './pages/Login';
 import { SignUp } from './pages/SignUp';
 import { useAuth } from './contexts/AuthContext';
+
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  if (!user) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -24,7 +33,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/" element={<DashboardLayout />}>
+      <Route path="/" element={<AuthGuard><DashboardLayout /></AuthGuard>}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />
         <Route path="leads/import" element={<ImportCSV />} />

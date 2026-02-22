@@ -60,6 +60,9 @@ export function DashboardLayout() {
         </Suspense>
         <footer className="dashboard-footer">
           <div className="dashboard-footer__links">
+            <Link to="/api-docs">API Docs</Link>
+            <Link to="/marketplace">App Marketplace</Link>
+            <Link to="/build-app">Build an App</Link>
             <Link to="/contact">Contact</Link>
           </div>
           <span className="dashboard-footer__brand">LSSIS — Lead Scoring & Sales Intelligence</span>

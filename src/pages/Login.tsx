@@ -7,8 +7,13 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
+
+  if (user) {
+    navigate(user.role === 'admin' ? '/admin' : '/', { replace: true });
+    return null;
+  }
   const logIn = trpc.auth.logIn.useMutation({
     onSuccess: (data) => {
       login(data.token, data.user);
@@ -22,6 +27,8 @@ export function Login() {
     setError('');
     logIn.mutate({ email, password });
   };
+
+  if (user) return null;
 
   return (
     <div className="auth-page">

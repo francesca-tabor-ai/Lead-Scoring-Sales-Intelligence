@@ -100,7 +100,7 @@ function AdminLeads() {
   const create = trpc.admin.createLead.useMutation({ onSuccess: () => refetch() });
   const update = trpc.admin.updateLead.useMutation({ onSuccess: () => refetch() });
   const del = trpc.admin.deleteLead.useMutation({ onSuccess: () => refetch() });
-  const [editing, setEditing] = useState<typeof items[0] | 'new' | null>(null);
+  const [editing, setEditing] = useState<NonNullable<typeof items>[number] | 'new' | null>(null);
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -182,7 +182,7 @@ function AdminCompanyProfiles() {
   const create = trpc.admin.createCompanyProfile.useMutation({ onSuccess: () => refetch() });
   const update = trpc.admin.updateCompanyProfile.useMutation({ onSuccess: () => refetch() });
   const del = trpc.admin.deleteCompanyProfile.useMutation({ onSuccess: () => refetch() });
-  const [editing, setEditing] = useState<(typeof items)[0] | 'new' | null>(null);
+  const [editing, setEditing] = useState<NonNullable<typeof items>[number] | 'new' | null>(null);
 
   return (
     <div className="admin-crud">
@@ -232,7 +232,7 @@ function AdminNLPFeatures() {
   const create = trpc.admin.createNLPFeatures.useMutation({ onSuccess: () => refetch() });
   const update = trpc.admin.updateNLPFeatures.useMutation({ onSuccess: () => refetch() });
   const del = trpc.admin.deleteNLPFeatures.useMutation({ onSuccess: () => refetch() });
-  const [editing, setEditing] = useState<(typeof items)[0] | 'new' | null>(null);
+  const [editing, setEditing] = useState<NonNullable<typeof items>[number] | 'new' | null>(null);
 
   return (
     <div className="admin-crud">
@@ -263,9 +263,9 @@ function AdminNLPFeatures() {
             }}>
               {editing === 'new' && <label>Lead ID <input name="leadId" required /></label>}
               <label>Sentiment <input type="number" step="0.01" name="sentiment" defaultValue={editing !== 'new' ? editing.sentiment ?? '' : ''} /></label>
-              <label><input type="checkbox" name="expansionSignal" defaultChecked={editing !== 'new' ? editing.expansionSignal : false} /> Expansion</label>
-              <label><input type="checkbox" name="hiringSignal" defaultChecked={editing !== 'new' ? editing.hiringSignal : false} /> Hiring</label>
-              <label><input type="checkbox" name="fundingSignal" defaultChecked={editing !== 'new' ? editing.fundingSignal : false} /> Funding</label>
+              <label><input type="checkbox" name="expansionSignal" defaultChecked={editing !== 'new' ? Boolean(editing.expansionSignal) : false} /> Expansion</label>
+              <label><input type="checkbox" name="hiringSignal" defaultChecked={editing !== 'new' ? Boolean(editing.hiringSignal) : false} /> Hiring</label>
+              <label><input type="checkbox" name="fundingSignal" defaultChecked={editing !== 'new' ? Boolean(editing.fundingSignal) : false} /> Funding</label>
               <div className="admin-form-actions"><button type="submit">Save</button><button type="button" onClick={() => setEditing(null)}>Cancel</button></div>
             </form>
           </div>
@@ -280,7 +280,7 @@ function AdminLeadScores() {
   const create = trpc.admin.createLeadScore.useMutation({ onSuccess: () => refetch() });
   const update = trpc.admin.updateLeadScore.useMutation({ onSuccess: () => refetch() });
   const del = trpc.admin.deleteLeadScore.useMutation({ onSuccess: () => refetch() });
-  const [editing, setEditing] = useState<(typeof items)[0] | 'new' | null>(null);
+  const [editing, setEditing] = useState<NonNullable<typeof items>[number] | 'new' | null>(null);
 
   return (
     <div className="admin-crud">
@@ -325,7 +325,6 @@ function AdminLeadScores() {
 
 function AdminBudgetAllocations() {
   const { data: items, refetch } = trpc.admin.listBudgetAllocations.useQuery();
-  const create = trpc.admin.createBudgetAllocation.useMutation({ onSuccess: () => refetch() });
   const del = trpc.admin.deleteBudgetAllocation.useMutation({ onSuccess: () => refetch() });
 
   return (
@@ -426,7 +425,7 @@ function AdminUsers() {
   const create = trpc.admin.createUser.useMutation({ onSuccess: () => refetch() });
   const updateRole = trpc.admin.updateUserRole.useMutation({ onSuccess: () => refetch() });
   const del = trpc.admin.deleteUser.useMutation({ onSuccess: () => refetch() });
-  const [editing, setEditing] = useState<(typeof items)[0] | 'new' | null>(null);
+  const [editing, setEditing] = useState<NonNullable<typeof items>[number] | 'new' | null>(null);
   const [createError, setCreateError] = useState('');
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {

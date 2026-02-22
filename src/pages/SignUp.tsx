@@ -7,8 +7,9 @@ export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
+
   const signUp = trpc.auth.signUp.useMutation({
     onSuccess: (data) => {
       login(data.token, data.user);
@@ -22,6 +23,8 @@ export function SignUp() {
     setError('');
     signUp.mutate({ email, password });
   };
+
+  if (user) return null;
 
   return (
     <div className="auth-page">
